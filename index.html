@@ -4,29 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Africa CO2 Emissions Dashboard</title>
-    <link rel="stylesheet" href="/node_modules/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-  <div id="container">
-    <div id="map"></div>
+    <div id="container">
+        <div id="map"></div>
 
-    <!-- The Animated Slide-in Modal -->
-    <div id="chart-container" class="side-modal">
-        <button id="close-btn">&times;</button>
-        <div class="modal-content">
-            <h3 id="region-title">CO2 Statistics</h3>
-            <canvas id="emissionChart"></canvas>
-            <p id="info-text">Data view for 2020 - 2022</p>
+        <!-- The Animated Slide-in Modal -->
+        <div id="chart-container" class="side-modal">
+            <button id="close-btn">&times;</button>
+            <div class="modal-content">
+                <h3 id="region-title">CO2 Statistics</h3>
+                <canvas id="emissionChart"></canvas>
+                <p id="info-text">Data view for 2020 - 2022</p>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Load Libraries -->
-    <script src="/node_modules/leaflet/dist/leaflet.js"></script>
-    <script src="/node_modules/chart.js/dist/chart.umd.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
