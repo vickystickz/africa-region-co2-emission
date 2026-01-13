@@ -1,54 +1,121 @@
-body,
-html {
+html,
+body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  font-family: sans-serif;
+  height: 100vh;
+  width: 100vw;
+  font-family: "Inter", sans-serif;
 }
+
+body {
+  overflow: hidden;
+}
+
+h1,
+h3,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Fullscreen map */
 #map {
-  width: 100%;
+  position: relative; /* ⬅ makes it the anchor for absolute children */
+  width: 100vw;
   height: 100vh;
   z-index: 1;
 }
-/* Modal Side Panel */
-#chart-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 400px; /* Width of the modal */
-  height: 100vh;
-  background: white;
-  z-index: 9999; /* Must be higher than Leaflet */
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
-  padding: 30px 20px;
-  transform: translateX(-100%); /* Start hidden to the right */
-  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); /* Smooth slide */
-}
 
-/* Class to trigger the slide-in */
-#chart-container.active {
-  transform: translateX(0);
-}
-
-/* Close Button Styling */
-#close-btn {
+.side-cards {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  background: none;
+  top: 19px; /* adjust as needed */
+  left: 19px; /* adjust as needed */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 10; /* ⬅ ensures it stays above the map */
+}
+
+.card-style {
+  color: #ffffff;
+  background-color: #090a0c;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  width: 388px;
+  line-height: 24px;
+  align-self: stretch;
+  z-index: 10; /* ⬅ ensures it stays above the map */
+  border: 1px solid #222732;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.control{
+  position: absolute;
+  bottom: 70px; /* adjust as needed */
+  right: 19px; /* adjust as needed */
+  display: flex;
+  flex-direction: column;
+  background-color: #090A0C;
+  z-index: 10; /* ⬅ ensures it stays above the map */
+  border-radius: 10px;
+  border: 1px solid #222732;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.control button {
   border: none;
-  font-size: 30px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  color: #333;
-  line-height: 1;
+  background-color: transparent;
 }
 
-#close-btn:hover {
-  color: #e63946;
+#zoom-in {
+    border-radius: 8px 8px 0px 0px;
 }
 
-.modal-content {
-  margin-top: 20px;
+#zoom-out {
+    border-radius: 0px 0px 8px 8px;
+    border-top: 1px solid #222732;
+}
+.control button:hover {
+  background-color: #1A1D25;
+}
+
+.top-content {
+  padding: 18px 16px;
+  border-bottom: 1px solid #222732;
+  color: #caced6;
+}
+
+.main-content {
+  padding: 24px 18px;
+  font-size: 14px;
+  line-height: 20px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #b9bec9;
+}
+
+/* Logo on top of the map */
+.sdg-logo {
+  position: absolute;
+  top: 19px; /* adjust as needed */
+  right: 19px; /* adjust as needed */
+  width: 73px;
+  height: 73px;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  border: 2px solid #000;
+  z-index: 10; /* ⬅ ensures it stays above the map */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .map-label {
@@ -66,6 +133,160 @@ html {
   justify-content: center;
   pointer-events: none;
   white-space: nowrap;
+}
+
+.info-card {
+  position: absolute;
+  background-color: #090a0c;
+  color: #b9bec9;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  z-index: 10; /* ⬅ ensures it stays above the map */
+  border: 1px solid #222732;
+}
+
+#selected-layer-container {
+  position: absolute;
+  top: 14%; /* adjust as needed */
+  right: 19px; /* adjust as needed */
+  z-index: 10; /* ⬅ ensures it stays above the map */
+  padding: 16px;
+  height: fit-content;
+  color: #caced6;
+
+  /* Animation: Move 120% to the right to hide, including shadow/padding */
+  transform: translateX(120%);
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  visibility: visible; /* Changed to visible so transform handles the hiding */
+}
+
+#selected-layer-container.active {
+  transform: translateX(0%); /* Slide into view */
+}
+
+/* Style the internal data points */
+.selected-description {
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.selected .title {
+  text-transform: capitalize;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.selected {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.selected .color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: #800026;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+/* Container for the three circles */
+/* The main container for the circles */
+
+.proportional-info {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+.proportional-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center them horizontally */
+  justify-content: center;
+  width: 67%;
+  position: relative;
+  padding: 10px 0;
+  /* This height allows them to sit close vertically */
+  height: auto;
+}
+
+/* Base circle styling */
+.prop-circle {
+  width: 55%;
+  aspect-ratio: 1 / 1; /* Ensures it stays a perfect circle */
+  background-color: #1A1D25;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+/* 2020: Positioned top-left */
+.circle-2020 {
+  align-self: flex-start;
+  margin-left: -5%;
+}
+
+/* 2021: Tucked under 2020, shifted right */
+.circle-2021 {
+  align-self: flex-end;
+  margin-right: -5%;
+  /* Percentage margin-top is relative to parent width */
+  margin-top: -15%;
+  z-index: 2;
+}
+
+/* 2022: Tucked under 2021, shifted back left */
+.circle-2022 {
+  align-self: flex-start;
+  margin-left: -5%;
+  margin-top: -25%;
+  z-index: 3;
+}
+
+/* Top Row: Icon and White Badge */
+.circle-top-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* Middle Row: Large Value */
+.main-value {
+  font-size: 22px;
+  font-weight: 500;
+  color: #e0e0e0;
+  margin-bottom: 12px;
+}
+
+/* Bottom Row: Year Badge */
+.year-badge {
+  font-family: "Geist", sans-serif;
+  background-color: #444E63;
+  color: #EBEDF0;
+  padding: 3.11px 4.21px;
+  border-radius: 16px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.source {
+  bottom: 24px; /* adjust as needed */
+  right: 19px; /* adjust as needed */
+}
+
+.author {
+  bottom: 19px; /* adjust as needed */
+  left: 19px; /* adjust as needed */
 }
 
 path.leaflet-interactive:focus {
