@@ -206,18 +206,17 @@ function generateProportionSymbol(feature) {
     selectedColor.style.backgroundColor = fillColor;
 
     const props = feature.properties;
-    const content = feature.properties.description;
+    const content = feature.properties.Desc || "No description available.";
     const years = ['2020', '2021', '2022'];
 
-    // 1. Update Title
+    // Update Title
     title.innerText = props.Region_1;
 
-    // 2. Update Text Description
-    // description.innerHTML = `
-    //     <p style="margin-bottom: 15px; font-size: 13px;">${content}</p>
-    // `;
+    // Update Description
+    description.innerHTML = `
+        <p style="margin: 15px 0px; font-size: 13px;">${content}</p>
+    `;
 
-    // --- SIZING LOGIC ---
     // Adjust scale factor so they grow but stay within bounds
     const scaleFactor = 3.5;
 
@@ -252,7 +251,7 @@ function generateProportionSymbol(feature) {
 
 }
 
-fetch('data/africa_region_co2_2020_to_2022.geojson')
+fetch('data/co2_stat_2020_to_2022_with_desc.geojson')
     .then(res => res.json())
     .then(data => {
         geoJsonLayer = data
