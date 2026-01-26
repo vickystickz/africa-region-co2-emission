@@ -13,11 +13,12 @@ body {
 
 h1,
 h3,
+h4,
+ul,
 p {
   margin: 0;
   padding: 0;
 }
-
 
 /* Fullscreen map */
 #map {
@@ -27,14 +28,35 @@ p {
   z-index: 1;
 }
 
-.side-cards {
+#info-icon-check {
   position: absolute;
-  top: 19px; /* adjust as needed */
-  left: 19px; /* adjust as needed */
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  z-index: 10; /* ⬅ ensures it stays above the map */
+  left: 19px;
+  top: 20px;
+  z-index: 10000;
+  cursor: pointer;
+}
+
+#close-info-btn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 24px;
+  padding: 0;
+  margin: 0;
+}
+
+#description-info {
+  position: absolute;
+  top: 19px;
+  left: 19px;
+  z-index: 10000;
+}
+
+.chart-content {
+  position: absolute;
+  bottom: 60px;
+  left: 19px;
 }
 
 .card-style {
@@ -47,17 +69,22 @@ p {
   line-height: 24px;
   align-self: stretch;
   z-index: 10; /* ⬅ ensures it stays above the map */
-  border: 1px solid #222732;
+  border: 1px solid #4b3b35;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.control{
+.active {
+  display: none !important;
+}
+
+
+.control {
   position: absolute;
   bottom: 70px; /* adjust as needed */
   right: 19px; /* adjust as needed */
   display: flex;
   flex-direction: column;
-  background-color: #090A0C;
+  background-color: #090a0c;
   z-index: 10; /* ⬅ ensures it stays above the map */
   border-radius: 10px;
   border: 1px solid #222732;
@@ -75,46 +102,152 @@ p {
   background-color: transparent;
 }
 
+a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  text-decoration: underline;
+}
+
+.Layer-control {
+  position: absolute;
+  bottom: 200px; /* adjust as needed */
+  right: 19px; /* adjust as needed */
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  padding: 18px;
+  background-color: #090a0c;
+  z-index: 10; /* ⬅ ensures it stays above the map */
+  border-radius: 10px;
+  border: 1px solid #222732;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.layer-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #222732;
+}
+
+.layer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 6px 0;
+  border-radius: 4px;
+}
+
+.layer-radio {
+  width: 20px;
+  height: 20px;
+  color: #ffffff;
+  accent-color: #ec692f;
+  cursor: pointer;
+}
+
+li {
+  list-style: none;
+}
+
+.layer-list {
+  display: flex;
+  font-size: 14px;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
+
+#emissionChart {
+  width: 100%;
+  height: 400px;
+}
+
+.chart-content {
+  width: 460px;
+}
+
 #zoom-in {
-    border-radius: 8px 8px 0px 0px;
+  border-radius: 8px 8px 0px 0px;
 }
 
 #zoom-out {
-    border-radius: 0px 0px 8px 8px;
-    border-top: 1px solid #222732;
+  border-radius: 0px 0px 8px 8px;
+  border-top: 1px solid #222732;
 }
+
 .control button:hover {
-  background-color: #1A1D25;
+  background-color: #1a1d25;
 }
 
 .top-content {
   padding: 18px 16px;
   border-bottom: 1px solid #222732;
-  color: #caced6;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-content h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#region-title{
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.intro-card {
+  width: 460px;
 }
 
 .main-content {
-  padding: 24px 18px;
+  padding: 6px 18px;
   font-size: 14px;
-  line-height: 20px;
-  min-height: 100px;
+  line-height: 27px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  color: #b9bec9;
+  /* color: #ffffff; */
+  color: #ffffff;
+}
+
+.main-content .description {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trend-icon {
+  width: 3em;
+  height: 3em;
+  display: inline-block;
+  vertical-align: -0.25em; /* fine-tune this value */
+  margin-bottom: -8px;
+}
+
+.info-note p {
+  line-height: 1.6;
 }
 
 /* Logo on top of the map */
 .sdg-logo {
   position: absolute;
-  top: 19px; /* adjust as needed */
-  right: 19px; /* adjust as needed */
+  top: 19px;
+  right: 19px;
   width: 73px;
   height: 73px;
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   border: 2px solid #000;
-  z-index: 10; /* ⬅ ensures it stays above the map */
+  z-index: 10;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -126,7 +259,9 @@ p {
   font-weight: 800;
   font-size: 10px;
   text-transform: uppercase;
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white;
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white;
   text-align: center;
   display: flex;
   align-items: center;
@@ -138,34 +273,39 @@ p {
 .info-card {
   position: absolute;
   background-color: #090a0c;
-  color: #b9bec9;
+  color: #ffffff;
   padding: 8px;
   border-radius: 8px;
   font-size: 12px;
-  z-index: 10; /* ⬅ ensures it stays above the map */
+  z-index: 10;
   border: 1px solid #222732;
+}
+
+.info-icon-check {
+  position: absolute;
+  top: 19px;
+  right: 19px;
+  z-index: 10000;
 }
 
 #selected-layer-container {
   position: absolute;
-  top: 14%; /* adjust as needed */
-  right: 19px; /* adjust as needed */
-  z-index: 10; /* ⬅ ensures it stays above the map */
+  top: 14%;
+  right: 19px;
+  z-index: 10;
   padding: 16px;
   height: fit-content;
   color: #caced6;
 
-  /* Animation: Move 120% to the right to hide, including shadow/padding */
   transform: translateX(120%);
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  visibility: visible; /* Changed to visible so transform handles the hiding */
+  visibility: visible;
 }
 
-#selected-layer-container.active {
-  transform: translateX(0%); /* Slide into view */
+#selected-layer-container.active-layer {
+  transform: translateX(0%);
 }
 
-/* Style the internal data points */
 .selected .description {
   margin-top: 15px;
   font-size: 14px;
@@ -216,7 +356,7 @@ p {
 .prop-circle {
   width: 55%;
   aspect-ratio: 1 / 1; /* Ensures it stays a perfect circle */
-  background-color: #1A1D25;
+  background-color: #1a1d25;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
@@ -271,8 +411,8 @@ p {
 /* Bottom Row: Year Badge */
 .year-badge {
   font-family: "Geist", sans-serif;
-  background-color: #444E63;
-  color: #EBEDF0;
+  background-color: #444e63;
+  color: #ebedf0;
   padding: 3.11px 4.21px;
   border-radius: 16px;
   font-size: 12px;

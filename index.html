@@ -14,25 +14,53 @@
 </head>
 
 <body>
+
     <aside class="side-cards">
-        <div class="card-style">
+        <div class="card-style intro-card" id="description-info">
             <div class="top-content">
-                <h3>African Fuel Co2 Emission (2020 -2022)</h3>
+                <h1>African Fuel Co2 Emission (2020 -2022)</h1>
+                <button id="close-info-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
             </div>
-
             <div class="main-content">
-                <p>Energy-related emissions from power transport, and industry.</p>
-                <p>Visualize the spatial disparities across African regions, identifying the major contributors and
-                    tracking the evolution of Co2 output from 2020 to 2022.</p>
+                <h4>Description</h4>
+                <div class="description">
+                    <p>
+                        <strong><a href="" target="_blank">Sustainable Development Goal 9 (SDG 9)</a> </strong>,
+                        which
+                        aims to build
+                        resilient
+                        infrastructure, promote inclusive and sustainable industrialization, and foster innovation,
+                        this
+                        map supports the assessment of <strong><a href="">Indicator 9.4.1</a> </strong>: CO₂
+                        emissions
+                        per unit of value
+                        added from fuel combustion.
 
+                    </p>
+                    <p class="info-note">
+                        The visualization reveals an increasing trend
+                        <img src="./public/trend_up.svg" alt="Trend Up Icon" class="trend-icon">
+                        in CO₂ emissions from fuel combustion across African regions between <strong>2020</strong>
+                        and
+                        <strong>2022</strong>,
+                        indicating growing carbon
+                        intensity within energy and industrial systems.
+                    </p>
+                </div>
             </div>
         </div>
-        <div id="chart-container" class="card-style">
+
+        <div id="chart-container" class="card-style chart-content">
             <div class="top-content">
-                <h3 id="region-title">CO2 Statistics</h3>
+                <h3 id="region-title"></h3>
             </div>
-            <!-- <button id="close-btn">&times;</button> -->
-            <div class="main-content">
+
+            <div class="main-content ">
 
                 <canvas id="emissionChart"></canvas>
             </div>
@@ -40,6 +68,15 @@
     </aside>
 
 
+    <div class="Layer-control">
+        <div class="layer-title">
+            <img src="./public/layer_icon.svg" alt="Layer Icon">
+            <h4>Base Map</h4>
+        </div>
+        <ul class="layer-list">
+
+        </ul>
+    </div>
     <div class="control">
         <button id="zoom-in" title="Zoom In">
             <img src="./public/plus_icon.svg" alt="Info Icon" class="zoom-in-icon">
@@ -57,7 +94,10 @@
         <div class="proportional-info">
         </div>
     </div>
-    <img src="./public/sdg_9.png" alt="SDG 9 Logo" class="sdg-logo">
+    <a href="https://sdgs.un.org/goals/goal9" target="_blank" class="sdg-link">
+        <img src="./public/sdg_9.png" alt="SDG 9 Logo" class="sdg-logo">
+    </a>
+
     <div id="map"></div>
     <p class="source info-card">Data Source: United Nations Statistics Division</p>
     <p class="author info-card">Author: Victor Ademoyero</p>
