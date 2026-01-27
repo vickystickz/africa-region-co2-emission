@@ -45,6 +45,7 @@ p {
 .link-container{
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   margin-top: 12px;
 }
@@ -52,6 +53,7 @@ p {
 .github-icon {
   width: 20px;
   height: 20px;
+  margin-top: 5px;
 }
 
 .learn-more-link{
