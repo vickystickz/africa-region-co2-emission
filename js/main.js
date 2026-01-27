@@ -20,6 +20,8 @@ const layerListContainer = document.querySelector('.layer-list');
 const hideBtn = document.getElementById('close-info-btn');
 const descriptionInfo = document.querySelector('.main-content');
 
+const closeSelectedLayerBtn = document.getElementById('close-selected-layer-btn');
+
 hideBtn.addEventListener('click', () => {
     // Toggle the active class
     descriptionInfo.classList.toggle('active');
@@ -32,7 +34,7 @@ hideBtn.addEventListener('click', () => {
     }
 });
 
-// 2. Add the click functionality
+// Add the click functionality
 zoomInBtn.addEventListener('click', () => {
     map.zoomIn();
 });
@@ -41,10 +43,10 @@ zoomOutBtn.addEventListener('click', () => {
     map.zoomOut();
 });
 
-// 3. Prevent map clicks when clicking the buttons
+// Prevent map clicks when clicking the buttons
 L.DomEvent.disableClickPropagation(controlContainer);
 
-// 2. Define Base Layers
+// Define Base Layers
 const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 });
@@ -59,14 +61,14 @@ const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/servi
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
 
-// 3. Add default layer to map
+// Add default layer to map
 dark.addTo(map);
 
 
 // Africa Region GeoJSON Layer (will be loaded later)
 let africaRegionLayer = null;
 
-// 4. Create Base Map Switcher object
+// Create Base Map Switcher object
 const baseMaps = {
     "CartoDB (Dark)": dark,
     "Esri World Imagery": satellite
@@ -249,6 +251,11 @@ const ColorRamp = {
     "5": "#E6F5C9"
 }
 
+
+closeSelectedLayerBtn.addEventListener('click', () => {
+    resetSelectedRegion();
+});
+
 function generateProportionSymbol(feature) {
     const container = document.getElementById('selected-layer-container');
     const title = document.getElementById('selected-title');
@@ -260,7 +267,7 @@ function generateProportionSymbol(feature) {
     selectedColor.style.backgroundColor = fillColor;
 
     const props = feature.properties;
-    const content = feature.properties.Desc || "No description available.";
+    const content = feature.properties.Desc || "";
     const years = ['2020', '2021', '2022'];
 
     title.innerText = props.Region_1;
