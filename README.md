@@ -3,7 +3,7 @@
 ## Overview
 This web map visualizes the CO₂ emissions per unit of value added from fuel combustion across the African continent for the years 2020, 2021, and 2022. The map provides an interactive platform for users to explore regional patterns and temporal changes in carbon intensity within Africa’s energy and industrial systems.
 
-<a href="https://africa-region-co2-emission.vercel.app/" target="_blank">
+<a href="https://africa-region-co2-emission.netlify.app/" target="_blank">
   <img src="./public/web_map.png" alt="Web Map" width="600"/>
 </a>
 
