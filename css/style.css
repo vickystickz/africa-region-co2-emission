@@ -1,4 +1,4 @@
-*{
+* {
   font-size: 14px;
 }
 
@@ -10,8 +10,6 @@ body {
   width: 100vw;
   font-family: "Inter", sans-serif;
 }
-
-
 
 body {
   overflow: hidden;
@@ -26,9 +24,8 @@ p {
   padding: 0;
 }
 
-/* Fullscreen map */
 #map {
-  position: relative; /* ⬅ makes it the anchor for absolute children */
+  position: relative; 
   width: 100vw;
   height: 100vh;
   z-index: 1;
@@ -42,7 +39,7 @@ p {
   cursor: pointer;
 }
 
-.link-container{
+.link-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,7 +53,7 @@ p {
   margin-top: 5px;
 }
 
-.learn-more-link{
+.learn-more-link {
   font-size: 14px;
   color: #ec692f;
   text-decoration: underline;
@@ -108,7 +105,7 @@ p {
   width: 388px;
   line-height: 24px;
   align-self: stretch;
-  z-index: 10; /* ⬅ ensures it stays above the map */
+  z-index: 10; 
   border: 1px solid #4b3b35;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -117,15 +114,14 @@ p {
   display: none !important;
 }
 
-
 .control {
   position: absolute;
-  bottom: 70px; /* adjust as needed */
-  right: 19px; /* adjust as needed */
+  bottom: 70px; 
+  right: 19px; 
   display: flex;
   flex-direction: column;
   background-color: #090a0c;
-  z-index: 10; /* ⬅ ensures it stays above the map */
+  z-index: 10;
   border-radius: 10px;
   border: 1px solid #222732;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -150,17 +146,27 @@ a {
 
 .Layer-control {
   position: absolute;
-  bottom: 200px; /* adjust as needed */
-  right: 19px; /* adjust as needed */
+  bottom: 200px; 
+  right: 19px;
   display: flex;
   flex-direction: column;
+  gap: 14px;
   color: #ffffff;
   padding: 18px;
   background-color: #090a0c;
-  z-index: 10; /* ⬅ ensures it stays above the map */
+  z-index: 10; 
   border-radius: 10px;
   border: 1px solid #222732;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.sub-layer-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  padding-bottom: 5px;
+  font-weight: 300px;
+  border-bottom: 1px solid #222732;
 }
 
 .layer-title {
@@ -168,18 +174,26 @@ a {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  padding-bottom: 14px;
+  padding-bottom: 5px;
+  margin-bottom: 4px;
   border-bottom: 1px solid #222732;
+}
+.layer-checkbox{
+  width: 16px;
+  height: 16px;
+  color: #ffffff;
+  accent-color: #ec692f;
+  cursor: pointer;
 }
 
 .layer-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 50px;
-  font-size: 14px;
+  gap: 12px;
+  font-size: 12px;
   cursor: pointer;
-  padding: 6px 0;
+  padding: 4px 0;
   border-radius: 4px;
 }
 
@@ -189,6 +203,16 @@ a {
   color: #ffffff;
   accent-color: #ec692f;
   cursor: pointer;
+}
+
+.country-label{
+   background: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 8px;
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px #000;
 }
 
 li {
@@ -239,7 +263,7 @@ li {
   margin-bottom: 8px;
 }
 
-#region-title{
+#region-title {
   font-size: 14px;
   font-weight: 600;
 }
@@ -255,7 +279,6 @@ li {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* color: #ffffff; */
   color: #ffffff;
 }
 
@@ -269,7 +292,7 @@ li {
   width: 3em;
   height: 3em;
   display: inline-block;
-  vertical-align: -0.25em; /* fine-tune this value */
+  vertical-align: -0.25em; 
   margin-bottom: -8px;
 }
 
@@ -277,7 +300,6 @@ li {
   line-height: 1.6;
 }
 
-/* Logo on top of the map */
 .sdg-logo {
   position: absolute;
   top: 19px;
@@ -372,8 +394,6 @@ li {
   margin-right: 8px;
 }
 
-/* Container for the three circles */
-/* The main container for the circles */
 
 .proportional-info {
   margin-top: 16px;
@@ -383,19 +403,17 @@ li {
 .proportional-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center them horizontally */
+  align-items: center;
   justify-content: center;
   width: 67%;
   position: relative;
   padding: 10px 0;
-  /* This height allows them to sit close vertically */
   height: auto;
 }
 
-/* Base circle styling */
 .prop-circle {
   width: 55%;
-  aspect-ratio: 1 / 1; /* Ensures it stays a perfect circle */
+  aspect-ratio: 1 / 1; 
   background-color: #1a1d25;
   border-radius: 50%;
   display: flex;
@@ -409,22 +427,18 @@ li {
   z-index: 1;
 }
 
-/* 2020: Positioned top-left */
 .circle-2020 {
   align-self: flex-start;
   margin-left: -5%;
 }
 
-/* 2021: Tucked under 2020, shifted right */
 .circle-2021 {
   align-self: flex-end;
   margin-right: -5%;
-  /* Percentage margin-top is relative to parent width */
   margin-top: -15%;
   z-index: 2;
 }
 
-/* 2022: Tucked under 2021, shifted back left */
 .circle-2022 {
   align-self: flex-start;
   margin-left: -5%;
@@ -432,7 +446,7 @@ li {
   z-index: 3;
 }
 
-/* Top Row: Icon and White Badge */
+
 .circle-top-row {
   display: flex;
   align-items: center;
@@ -440,7 +454,6 @@ li {
   margin-bottom: 10px;
 }
 
-/* Middle Row: Large Value */
 .main-value {
   font-size: 22px;
   font-weight: 500;
@@ -448,7 +461,7 @@ li {
   margin-bottom: 12px;
 }
 
-/* Bottom Row: Year Badge */
+
 .year-badge {
   font-family: "Geist", sans-serif;
   background-color: #444e63;
@@ -460,13 +473,13 @@ li {
 }
 
 .source {
-  bottom: 24px; /* adjust as needed */
-  right: 19px; /* adjust as needed */
+  bottom: 24px;
+  right: 19px;
 }
 
 .author {
-  bottom: 19px; /* adjust as needed */
-  left: 19px; /* adjust as needed */
+  bottom: 19px; 
+  left: 19px;
 }
 
 path.leaflet-interactive:focus {

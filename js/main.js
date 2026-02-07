@@ -2,6 +2,7 @@ const southWest = L.latLng(-40, -30);
 const northEast = L.latLng(40, 60);
 const bounds = L.latLngBounds(southWest, northEast);
 
+
 const map = L.map('map', {
     center: [1.0, 15.0],
     zoom: 3.5,
@@ -12,11 +13,15 @@ const map = L.map('map', {
     zoomControl: false
 });
 
+// hide the layer control by default
+const layerControl = L.control.layers(null, null, { collapsed: true });
+
 
 const zoomInBtn = document.getElementById('zoom-in');
 const zoomOutBtn = document.getElementById('zoom-out');
 const controlContainer = document.querySelector('.control');
 const layerListContainer = document.querySelector('.layer-list');
+const baseMapListContainer = document.querySelector('.basemap-list');
 const hideBtn = document.getElementById('close-info-btn');
 const descriptionInfo = document.querySelector('.main-content');
 
@@ -34,7 +39,8 @@ hideBtn.addEventListener('click', () => {
     }
 });
 
-// Add the click functionality
+
+// Zoom control buttons
 zoomInBtn.addEventListener('click', () => {
     map.zoomIn();
 });
@@ -43,20 +49,28 @@ zoomOutBtn.addEventListener('click', () => {
     map.zoomOut();
 });
 
-// Prevent map clicks when clicking the buttons
+
+
+// Avoids clicking on the map when interacting with the controls
 L.DomEvent.disableClickPropagation(controlContainer);
 
-// Define Base Layers
+
+
+
+// OSM Layer
 const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 });
 
+// CartoDB Dark  Layer
 const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO',
     subdomains: 'abcd',
     maxZoom: 20
 });
 
+
+// Esri World Imagery Layer
 const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
@@ -67,6 +81,7 @@ dark.addTo(map);
 
 // Africa Region GeoJSON Layer (will be loaded later)
 let africaRegionLayer = null;
+let countryBordersLayer;
 
 // Create Base Map Switcher object
 const baseMaps = {
@@ -75,52 +90,64 @@ const baseMaps = {
 };
 
 
-// Generate layer list with radio buttons
-layerListContainer.innerHTML = Object.keys(baseMaps).map((layerName, index) => `
+// Generate layer list 
+baseMapListContainer.innerHTML = `
+  ${Object.keys(baseMaps).map((layerName, index) => `
     <li class="layer-item ${index === 0 ? 'active-layer' : ''}" data-layer="${layerName}">
-        <label style="display: flex; align-items: center; justify-content: space-between; gap:40px; width: 100%; cursor: pointer;">
-            <span>${layerName}</span>
-            <input type="radio" name="basemap" value="${layerName}" ${index === 0 ? 'checked' : ''} class="layer-radio">
-        </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;gap:40px;width:100%;cursor:pointer;">
+        <span>${layerName}</span>
+        <input type="radio" name="basemap" value="${layerName}"
+          ${index === 0 ? 'checked' : ''} class="layer-radio">
+      </label>
     </li>
-`).join('');
+  `).join('')}
+`;
 
-// Add change event listeners to radio buttons
-const radioButtons = document.querySelectorAll('.layer-radio');
-radioButtons.forEach(radio => {
+// Generate Base Map list
+layerListContainer.innerHTML = `
+  <li class="layer-item" data-layer="country-borders">
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:40px;width:100%;cursor:pointer;">
+      <span>Country Borders</span>
+      <input type="checkbox" id="country-borders-toggle" class="layer-checkbox">
+    </label>
+  </li>
+`;
+
+// Basemap radio logic
+document.querySelectorAll('.layer-radio').forEach(radio => {
     radio.addEventListener('change', function () {
-        if (this.checked) {
-            const layerName = this.value;
-            const layer = baseMaps[layerName];
+        if (!this.checked) return;
 
-            // Remove all layers first
-            Object.values(baseMaps).forEach(l => map.removeLayer(l));
+        Object.values(baseMaps).forEach(l => map.removeLayer(l));
+        baseMaps[this.value].addTo(map);
 
-            // Add selected layer
-            layer.addTo(map);
-
-            // Update active state on list items
-            const layerItems = document.querySelectorAll('.layer-item');
-            layerItems.forEach(li => {
-                li.classList.remove('active-layer');
-                if (li.getAttribute('data-layer') === layerName) {
-                    li.classList.add('active-layer');
-                }
-            });
-        }
+        document.querySelectorAll('.layer-item').forEach(li =>
+            li.classList.toggle('active-layer', li.dataset.layer === this.value)
+        );
     });
+});
+
+// Country borders checkbox logic
+const bordersToggle = document.getElementById('country-borders-toggle');
+
+bordersToggle.addEventListener('change', e => {
+    if (!countryBordersLayer) return;
+
+    e.target.checked
+        ? map.addLayer(countryBordersLayer)
+        : map.removeLayer(countryBordersLayer);
 });
 
 
 
 let selectedRegion = null;
-let allRegionsData = []; // Store all regions data for default view
+let allRegionsData = [];
 
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.Region_1) {
         let center;
 
-        // Check if it's a MultiPolygon
+        // Confirms if it's a multipolygon
         if (feature.geometry.type === 'MultiPolygon') {
             let maxArea = 0;
             let largestPolygon = null;
@@ -143,7 +170,7 @@ function onEachFeature(feature, layer) {
             center = layer.getBounds().getCenter();
         }
 
-        // Hover tooltip
+        // tooltip
         layer.bindTooltip(
             `<div style="font-family: sans-serif; padding: 5px;">
                 <strong style="font-size: 14px; color: #800026;">${feature.properties.Region_1}</strong><br/>
@@ -157,7 +184,7 @@ function onEachFeature(feature, layer) {
             className: 'hover-tooltip'
         });
 
-        // Create the invisible marker and label at the precise center
+        // Positition label at the center of the poylgon
         const labelMarker = L.marker(center, { opacity: 0 });
         labelMarker.bindTooltip(feature.properties.Region_1, {
             permanent: true,
@@ -167,7 +194,7 @@ function onEachFeature(feature, layer) {
         }).addTo(map);
     }
 
-    // Click event to update chart
+    //  Update chart and show proportions of Co2 Emissions when clicking on a region
     layer.on('click', function (e) {
         if (feature === selectedRegion) {
             resetSelectedRegion();
@@ -179,14 +206,13 @@ function onEachFeature(feature, layer) {
 
         document.getElementById('region-title').innerText = `${feature.properties.Region_1} CO₂ Statistics`;
 
-        // Update chart for individual region
         const stats = [
             feature.properties['2020'],
             feature.properties['2021'],
             feature.properties['2022']
         ] || [0, 0, 0];
 
-        // Switch to single dataset (bar chart)
+
         emissionChart.data.datasets = [{
             label: `Emissions for ${feature.properties.Region_1}`,
             data: stats,
@@ -221,28 +247,6 @@ function onEachFeature(feature, layer) {
     });
 }
 
-function resetSelectedRegion() {
-    selectedRegion = null;
-    document.getElementById('selected-layer-container').classList.remove('active-layer');
-
-    // Reset to stacked chart showing all regions
-    document.getElementById('region-title').innerText = 'Total CO₂ Emissions by Region (2020-2022)';
-
-    // Recreate stacked datasets
-    const datasets = allRegionsData.map((region, index) => {
-        const colors = ['#B3E2CD', '#FDCDAC', '#D7B09E', '#F4F1EA', '#E6F5C9'];
-        return {
-            label: region.name,
-            data: region.data,
-            backgroundColor: colors[index % colors.length],
-        };
-    });
-
-    emissionChart.data.datasets = datasets;
-    emissionChart.options.plugins.legend.display = true;
-    emissionChart.update();
-}
-
 const ColorRamp = {
     "1": "#B3E2CD",
     "2": "#FDCDAC",
@@ -251,11 +255,33 @@ const ColorRamp = {
     "5": "#E6F5C9"
 }
 
+// reset  the selected region to default view
+function resetSelectedRegion() {
+    selectedRegion = null;
+    document.getElementById('selected-layer-container').classList.remove('active-layer');
+    document.getElementById('region-title').innerText = 'Total CO₂ Emissions by Region (2020-2022)';
+    const datasets = allRegionsData.map((region, index) => {
+        return {
+            label: region.name,
+            data: region.data,
+            backgroundColor: ColorRamp[index % colors.length],
+        };
+    });
+
+    emissionChart.data.datasets = datasets;
+    emissionChart.options.plugins.legend.display = true;
+    emissionChart.update();
+}
+
+
+
 
 closeSelectedLayerBtn.addEventListener('click', () => {
     resetSelectedRegion();
 });
 
+
+// Generate proportion of co2 emission for each year as circle when a region is selected
 function generateProportionSymbol(feature) {
     const container = document.getElementById('selected-layer-container');
     const title = document.getElementById('selected-title');
@@ -305,6 +331,8 @@ function generateProportionSymbol(feature) {
     container.classList.add('active-layer');
 }
 
+
+// retrieve the Layer
 fetch('data/co2_stat_2020_to_2022_with_desc.geojson')
     .then(res => res.json())
     .then(data => {
@@ -332,6 +360,60 @@ fetch('data/co2_stat_2020_to_2022_with_desc.geojson')
             onEachFeature: onEachFeature
         }).addTo(map);
     });
+
+
+function onCountryEachFeature(feature, layer) {
+    if (feature.properties && feature.properties.Country) {
+        layer.bindTooltip(
+            `<div style="font-family: sans-serif; padding: 5px;">
+                <strong style="font-size: 14px; color: #800026;">${feature.properties.Country}</strong><br/>
+            </div>`,
+            {
+                permanent: false,
+                sticky: true,
+                direction: 'auto',
+                className: 'hover-tooltip'
+            }
+        );
+    }
+
+    layer.on('mouseover', function () {
+        this.setStyle({
+            weight: 4,
+            color: '#ec692f',
+            fillOpacity: 0.2,
+            dashArray: ''
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            this.bringToFront();
+        }
+    });
+
+    layer.on('mouseout', function () {
+        this.setStyle({
+            weight: 1,
+            color: '#ec692f',
+            fillOpacity: 0
+        });
+    });
+}
+
+
+fetch('data/countries_co2_2020_to_2022.geojson')
+    .then(res => res.json())
+    .then(data => {
+        countryBordersLayer = L.geoJSON(data, {
+            style: {
+                color: '#ec692f',
+                weight: 1,
+                fillOpacity: 0
+            },
+            onEachFeature: onCountryEachFeature
+        });
+        layerControl.addOverlay(countryBordersLayer, 'Country Borders');
+    });
+
 
 function initializeStackedChart() {
     const colors = ['#B3E2CD', '#FDCDAC', '#D7B09E', '#F4F1EA', '#E6F5C9'];
@@ -395,7 +477,7 @@ let emissionChart = new Chart(ctx, {
         maintainAspectRatio: false,
         scales: {
             y: {
-                stacked: true, // Enable stacking
+                stacked: true,
                 beginAtZero: true,
                 title: {
                     display: true,
@@ -416,7 +498,7 @@ let emissionChart = new Chart(ctx, {
                 },
             },
             x: {
-                stacked: true, // Enable stacking
+                stacked: true,
                 title: {
                     display: true,
                     text: 'Reporting Year',
